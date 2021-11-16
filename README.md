@@ -8,7 +8,7 @@
 Testing full-stack application with authentication
 
 # Requirements
-This application requires nodeJs, express, and nedb
+This application requires nodeJs, [express](https://github.com/expressjs/express), and [NeDB](https://github.com/louischatriot/nedb)
 
 # Installation
 Run the following commands
