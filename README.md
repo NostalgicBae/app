@@ -2,7 +2,7 @@
 * Introduction
 * Requirements
 * Recommended modules
-* InstallationSS
+* Installation
 
 # Introduction
 Testing full-stack application with authentication
