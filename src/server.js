@@ -1,17 +1,9 @@
 const express = require('express');
-const Datastore = require('nedb');
 const projectRouter = require('./routes/projects.js');
 const { authUser, authRole } = require('./basicAuth');
-const { user } = require('./routes/projects.js');
+const { getUser } = require('./mongodb.js');
+const { ROLE } = require('./roles.js')
 
-// Load Database
-
-const usersDb = new Datastore({filename: './src/database/users.db', autoload: true});
-
-const ROLE = {
-    ADMIN: 'admin',
-    BASIC: 'basic'
-};
 
 // Initialize server
 
@@ -37,17 +29,13 @@ app.get('/admin', authUser, authRole(ROLE.ADMIN), (req, res) => {
     res.send('Admin Page');
 });
 
+
 // Middleware
+
 async function setUser(req, res, next) {
     const userId = req.body.userId;
     if (userId) {
-        req.user = await usersDb.findOne({ id: userId }, (err, user) => {
-            if (err) {
-                return res.send(`User not in database`)
-            }
-            return user
-        })
-        console.log(req.user)
+        req.user = await getUser(userId)
     }
     next()
 };

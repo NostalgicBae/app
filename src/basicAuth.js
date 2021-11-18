@@ -1,11 +1,10 @@
 function authUser(req, res, next) {
-    console.log(req.user)
     if (req.user == null) {
         res.status(403)
         return res.send('You need to sign in')
     }
     next();
-}
+};
 
 function authRole(role) {
     return (req, res, next) => {
@@ -14,8 +13,8 @@ function authRole(role) {
             return res.send('Not allowed')
         }
         next()
-    }
-}
+    };
+};
 
 module.exports = {
     authUser,

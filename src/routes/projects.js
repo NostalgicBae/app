@@ -1,20 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const Datastore = require('nedb');
+const { getProject } = require('../mongodb.js');
+const { authUser } = require('../basicAuth.js');
+const { getUser } = require('../mongodb.js');
+const { canViewProject, scopedProjects } = require('../permissions/project.js');
 
-const projectsDb = new Datastore({filename: './src/database/projects.db', autoload: true});
+router.get('/', setUser, (req, res) => {
 
-router.get('/', (req, res) => {
-    res.json(projectsDb)
+    console.log(scopedProjects(req.user))
+
+    res.json(scopedProjects(req.user))
 });
 
-router.get('/:projectId', setProject, (req, res) => {
+router.get('/:projectId', setUser,  setProject, authUser, authGetProject, (req, res) => {
     res.json(req.project)
 });
 
-function setProject(req, res, next) {
+async function setProject(req, res, next) {
     const projectId = parseInt(req.params.projectId)
-    req.project = projectsDb.find(project => project.id === projectId)
+    req.project = await getProject(projectId)
 
     if (req.project == null) {
         res.status(404);
@@ -22,5 +26,24 @@ function setProject(req, res, next) {
     }
     next();
 };
+
+
+function authGetProject(req, res, next) {
+    if (!canViewProject(req.user, req.project)) {
+        res.status(401)
+        return res.send('Not allowed')
+    }
+    next()
+}
+
+async function setUser(req, res, next) {
+    const userId = req.body.userId;
+    if (userId) {
+        req.user = await getUser(userId)
+    }
+    next()
+};
+
+
 
 module.exports = router;

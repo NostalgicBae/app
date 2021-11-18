@@ -5,12 +5,14 @@
   "main": "server.js",
   "scripts": {
     "start": "node ./src/server.js",
-    "nodemonStart": "nodemon ./src/server.js"
+    "Start": "nodemon ./src/server.js"
   },
   "author": "nostalgicbae",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "mongodb": "^4.2.0",
     "nedb": "^1.8.0"
   }
 }
