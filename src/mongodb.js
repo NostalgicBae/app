@@ -2,7 +2,7 @@ const MongoClient = require("mongodb").MongoClient;
 require('dotenv').config();
 
 const username = process.env.MONGO_USERNAME;
-const password = process.env.MONGO_PASSWORD
+const password = process.env.MONGO_PASSWORD;
 
 const uri = `mongodb+srv://${username}:${password}@database-test.ahznk.mongodb.net/Database-Test?retryWrites=true&w=majority`;
 
