@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node ./src/server.js",
-    "devStart": "nodemon ./src/server.js"
+    "nodemonStart": "nodemon ./src/server.js"
   },
   "author": "nostalgicbae",
   "license": "MIT",

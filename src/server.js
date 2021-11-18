@@ -1,7 +1,8 @@
 const express = require('express');
 const Datastore = require('nedb');
 const projectRouter = require('./routes/projects.js');
-const { authUser, authRole } = require('./basicAuth')
+const { authUser, authRole } = require('./basicAuth');
+const { user } = require('./routes/projects.js');
 
 // Load Database
 
@@ -10,7 +11,7 @@ const usersDb = new Datastore({filename: './src/database/users.db', autoload: tr
 const ROLE = {
     ADMIN: 'admin',
     BASIC: 'basic'
-}
+};
 
 // Initialize server
 
@@ -37,15 +38,16 @@ app.get('/admin', authUser, authRole(ROLE.ADMIN), (req, res) => {
 });
 
 // Middleware
-
-function setUser(req, res, next) {
+async function setUser(req, res, next) {
     const userId = req.body.userId;
     if (userId) {
-        usersDb.findOne({ id: userId }, function (err, user) {
+        req.user = await usersDb.findOne({ id: userId }, (err, user) => {
+            if (err) {
+                return res.send(`User not in database`)
+            }
             return user
         })
+        console.log(req.user)
     }
     next()
 };
-
-
