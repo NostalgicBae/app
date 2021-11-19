@@ -33,7 +33,11 @@ async function getProject(projectId) {
     // Query for a movie that has the title 'Back to the Future'
     const query = { id: projectId };
     const project = await projects.findOne(query);
-    console.log(`${project.name} found!`);
+    if (!project) {
+      console.log('Project not found')
+    } else {
+      console.log(`${project.name} found!`);
+    }
     client.close();
     return project
   } finally {
